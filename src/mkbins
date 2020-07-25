@@ -1,0 +1,18 @@
+#!/bin/sh
+
+echo Plan9/arm
+GOOS=plan9 GOARCH=arm go build -o eniac.plan9_arm
+echo FreeBSD/amd64
+GOOS=freebsd GOARCH=amd64 go build -o eniac.freebsd_amd64
+echo FreeBSD/i386
+GOOS=freebsd GOARCH=386 go build -o eniac.freebsd_i386
+echo Linux/arm
+GOOS=linux GOARCH=arm go build -o eniac.linux_arm
+echo Linux/amd64
+GOOS=linux GOARCH=amd64 go build -o eniac.linux_amd64
+echo Linux/i386
+GOOS=linux GOARCH=386 go build -o eniac.linux_i386
+echo MacOS/amd64
+GOOS=darwin GOARCH=amd64 go build -o eniac.macos_amd64
+echo Windows/amd64
+GOOS=windows GOARCH=amd64 go build -o eniac.exe
