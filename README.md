@@ -9,4 +9,4 @@ that were made at the Ballistics Research Lab
 during its operational life.
 
 The simulator is discussed in some detail in
-[Simulating the ENIAC] (http://ieeexplore.ieee.org/document/8326772/).
+[Simulating the ENIAC](http://ieeexplore.ieee.org/document/8326772/).
