@@ -1,0 +1,376 @@
+\magnification=1200
+\centerline{\bf ENIAC Simulator Configuration Notation Reference}
+\vskip 12pt
+\noindent
+{\bf Initiating Unit}
+
+Terminals
+
+{\advance\leftskip 0.5in
+\item{\tt Ci$n$:} Selective clear input ($1\le n\le 6$)
+\item{\tt Co$n$:} Selective clear ouput ($1\le n\le 6$)
+\item{\tt Ri:} Reader input
+\item{\tt Ro:} Reader output
+\item{\tt Rl:} Reader interlock
+\item{\tt Pi:} Printer/punch input
+\item{\tt Po:} Printer/punch output
+\item{\tt Pl:} Printer/punch interlock
+\item{\tt Io:} Initiating pulse output
+
+}
+
+Buttons
+
+{\advance\leftskip 0.5in
+\item{\tt c:} Initial clear
+\item{\tt i:} Initiating pulse
+\item{\tt r:} Reader start switch
+
+}
+
+Examples
+
+{\advance\leftskip 0.5in
+\item{1.} Press the initiating pulse button: {\tt b i}
+\item{2.} Plug a program jumper from the initiating pulse
+output of the initiating unit to program trunk 1, line 2:  {\tt p i.Io 1-2}
+
+}
+
+Notes
+
+{\advance\leftskip 0.5in
+\item{1.} Although the clear, reader, printer, and initiate mnemonics
+are show as upper case here and on most of the original diagrams,
+either upper or lower case are accecpted by the simulator.
+\item{2.} The terminals for {\tt Rs} and {\tt Is} are not implemented as these
+are assumed connected to the hand-held control unit.
+\item{3.} The Start, Stop, and Door Shut switches are not implemented.
+
+}
+
+\vskip 12pt
+\noindent
+{\bf Cycling Unit}
+
+Switch
+
+{\advance\leftskip 0.5in
+\item{\tt op:} Cycling unit operating mode: 1a (1 add), 1p (1 pulse), or co (continuous)
+
+}
+
+Button
+
+{\advance\leftskip 0.5in
+\item{\tt p:} 1 pulse \& 1 add time button
+
+}
+
+Examples
+
+{\advance\leftskip 0.5in
+\item{1.} Set the cycling unit to 1 add mode:  {\tt s cy.op 1a}
+\item{2.} Single step in 1a or 1p modes: {\tt b p}
+
+}
+
+Notes
+
+{\advance\leftskip 0.5in
+\item{1.} The PA, Ext, 1A, and Cont terminals are unimplemented.
+\item{2.} The heater switch is unimplemented.
+\item{3.} The oscilloscope and oscilloscope input switch are unimplemented.
+\item{4.} Values for the operation switch may be specified in either upper
+or lower case.
+
+}
+
+\vfill\eject
+\vskip 12pt
+\noindent
+{\bf Constant Transmitter}
+
+Terminals
+
+{\advance\leftskip 0.75in
+\item{\tt o:} Digit output terminal
+\item{\tt $n$i:} Program input terminals ($1\le n\le 30$)
+\item{\tt $n$o:} Program output terminals ($1\le n\le 30$)
+
+}
+
+Switches
+
+{\advance\leftskip 0.75in
+\item{\tt s$n$:} Constant selector ($1\le n\le 30$): {\tt Al}, {\tt Ar}, {\tt Alr}, ..., {\tt Kl}, {\tt Kr}, {\tt Klr}
+\item{\tt jl, jr:}
+\item{\tt kl, kr:} PM set: {\tt P} or {\tt M}
+\item{\tt j$n$, k$n$:} Constant set ($1\le n\le 10$): 0--9
+
+}
+
+\vskip 12pt
+\noindent
+{\bf Printer}
+
+Switches
+
+{\advance\leftskip 0.75in
+\item{$n$--$m$:} Coupling ($1\le n\le 8$, $m=n+1$): {\tt 0} or {\tt C}
+\item{$n$:} Printing ($1\le n\le 16$): {\tt O} or {\tt P}
+
+}
+
+\vskip 12pt
+\noindent
+{\bf Accumulator}
+
+Terminals
+
+{\advance\leftskip 0.5in
+\item{$\alpha$--$\epsilon$:} Input data terminals
+\item{\tt A:} Additive output data terminal
+\item{\tt S:} Subtractive output data terminal
+\item{\tt $n$i:} Program input terminal ($1\le n\le 12$)
+\item{\tt $n$o:} Program output terminal ($5\le n\le 12$)
+\item{\tt I$sn$:} Accumulator interconnect terminals
+($s\in\lbrace {\tt l, r}\rbrace$, $n\in\lbrace 1, 2\rbrace$)
+\item{\tt lb:} Special notation for a load block on interconnects
+
+}
+
+Switches
+
+{\advance\leftskip 0.5in
+\item{\tt op$n$:} Operation select ($1\le n\le 12$): $\alpha$--$\epsilon$, {\tt 0}, {\tt A}, {\tt AS}, or {\tt S}
+\item{\tt rp$n$:} Repeat ($5\le n\le 12$): 1--9
+\item{\tt cc$n$:} Clear correct ($1\le n\le 12$): {\tt 0} or {\tt C}
+\item{\tt sf:} Significant figures: 0--10
+\item{\tt sc:} Selective clear: {\tt 0} or {\tt SC}
+
+}
+
+Examples
+
+{\advance\leftskip 0.5in
+\item{1.} Plug jumper from data trunk 3 to the gamma input on accumulator 12: {\tt p 3 a12.$\gamma$}
+\item{2.} Set program 5 on accumulator 9 to output additively: {\tt s a9.op5 A}
+\item{3.} Set accumulator 2 program 7 repeat to 4: {\tt s a2.rp7 4}
+
+}
+
+Notes
+
+{\advance\leftskip 0.5in
+\item{1.} Carry clear and selective clear switch settings may be specified in
+either upper or lower case.
+\item{2.} The input data terminals and input operation switch settings may be
+specified with either  a Unicode Greek letter, the lower case spelled-out name of the Greek
+letter, or the corresponding lower case Roman letter.
+
+}
+
+\vfill\eject
+\noindent
+{\bf High Speed Multiplier}
+
+Terminals
+
+{\advance\leftskip 1in
+\item{\tt lhppI:}
+\item{\tt lhppII:}
+\item{\tt rhppI:}
+\item{\tt rhppII:} Partial product data terminals
+\item{{\tt R$\alpha$}--{\tt R$\epsilon$:}} Multiplier accumulator program pulse outputs
+\item{{\tt D$\alpha$}--{\tt D$\epsilon$:}} Multiplicand accumulator program pulse outputs
+\item{\tt A, S, AS:}
+\item{\tt AC, SC, ASC:} Product disposal terminals
+\item{\tt RS, DS, F:} Internal operating terminals
+\item{\tt $n$i:} Program input terminals ($1\le n \le 24$)
+\item{\tt $n$o:} Program output terminals ($1\le n \le 24$)
+
+}
+
+
+\vskip 6pt
+Switches
+
+{\advance\leftskip 1in
+\item{\tt ieracc$n$:} Multiplier accumulator receive switch ($1\le n\le 24$): $\alpha$--$\epsilon$ or {\tt 0}
+\item{\tt icandacc$n$:} Multiplicand accumulator receive switch
+($1\le n\le 24$): $\alpha$--$\epsilon$ or {\tt 0}
+\item{\tt sf$n$:} Significant figures switch ($1\le n\le 24$): 0, 2--10
+\item{\tt place$n$:} Multiplier places switch ($1\le n\le 24$): 2--10
+\item{\tt prod$n$:} Product disposal switch ($1\le n\le 24$): {\tt A}, {\tt S}, {\tt AS}, {\tt 0},
+{\tt AC}, {\tt SC}, or {\tt ASC}
+\item{\tt iercl$n$:} Multiplier accumulator clear switch ($1\le n\le 24$): {\tt 0} or {\tt C}
+\item{\tt icandcl$n$:} Multiplicand accumulator clear switch ($1\le n\le 24$): {\tt 0} or {\tt C}
+
+}
+
+\vskip 6pt
+Typical Multiplier Setup
+
+\halign{\qquad\qquad\tt #\quad & \tt #\quad & \tt #\quad & \tt #\cr
+{\rm Multiplier} & {\rm Multiplicand} & {\rm LHPP} & {\rm RHPP} \cr
+p m.R$\alpha$ 9-1 & p m.D$\alpha$ 9-2 & p 9-4 a11.2i & p m.A 9-3\cr
+p 9-1 a9.1i & p 9-2 a10.1i & p m.F 9-6 & p 9-3 a13.3i\cr
+p m.RS 9-4 & p m.DS 9-5 & p 9-6 a11.1i & p 9-5 a13.2i\cr
+p 9-4 a9.6i & p 9-5 a10.6i & p 7 a11.$\beta$ & p 9-6 a13.1i\cr
+p a9.S 7 & p a10.S 6 & p a11.A 6 & p 6 a13.$\beta$ \cr
+s m.ieracc1 $\alpha$ & s m.icandacc1 $\alpha$ & p m.lhppI 8 & p m.rhppI 9\cr
+s m.iercl1 C & s micandcl1 C & p 8 a11.$\alpha$ & p 9 a13.$\alpha$\cr
+s a9.op1 $\alpha$ & s a10.op1 $\alpha$ & s a11.op1 A & s a13.op1 $\beta$\cr
+s a9.op6 S & s a10.op6 S & s a11.cc1 C & s a13.op2 $\beta$\cr
+s a9.rp6 1 & s a10.rp6 1 & s a11.op2 $\beta$ & s a13.op3 A\cr
+& & s m.sf1 8 & \cr
+& & s m.place1 2 & \cr
+& & s m.prod1 A & \cr
+}
+\vfill\eject
+\noindent
+{\bf Divider \& Square Rooter}
+
+Terminals
+
+{\advance\leftskip 0.5in
+\item{\tt $n$i:} Program input terminals ($1\le n\le 8$)
+\item{\tt $n$o:} Program output terminals ($1\le n\le 8$)
+\item{\tt $n$l:} Program interlock terminals ($1\le n\le 8$)
+\item{\tt ans:} Digit answer output terminal
+
+}
+
+Adapters (specified as switches)
+
+{\advance\leftskip 0.5in
+\item{\tt da:} Divider adapter set: {\tt A}, {\tt B}, or {\tt C}
+\item{\tt ra:} Square Rooter adapter set: {\tt A}, {\tt B}, or {\tt C}
+
+}
+
+Switches
+
+{\advance\leftskip 0.5in
+\item{\tt nr$n$:} Numerator accumulator receive ($1\le n\le 8$): $\alpha$, $\beta$, or {\tt 0}
+\item{\tt nc$n$:} Numerator accumulator clear ($1\le n\le 8$): {\tt 0} or {\tt C}
+\item{\tt dr$n$:} Denominator-square-root accumulator receive ($1\le n\le 8$): $\alpha$, $\beta$, or {\tt 0}
+\item{\tt dc$n$:} Denominator-square-root accumulator clear ($1\le n\le 8$): {\tt 0} or {\tt C}
+\item{\tt pl$n$:} Places ($1\le n\le 8$): {\tt D4}, {\tt D7}--{\tt 10}, {\tt S4}, or {\tt S7}--{\tt 10}
+\item{\tt ro$n$:} Round-off ($1\le n\le 8$): {\tt RO} or {\tt NRO}
+\item{\tt an$n$:} Answer disposal ($1\le n\le 8$): 1--4, or {\tt OFF}
+\item{\tt il$n$:} Interlock ($1\le n\le 8$): {\tt I} or {\tt NI}
+
+}
+
+Basic Setup
+
+\halign{\qquad\qquad\tt #\qquad & \tt #\hfil\cr
+{\rm Divider} & {\rm Square Rooter}\cr
+p d.ans 8 & p d.ans 8\cr
+p 8 a2.$\alpha$ & p 8 a2.$\alpha$\cr
+p 8 a5.$\gamma$ & p 8 a5.$\gamma$\cr
+p a5.A 9 & p a5.A 9\cr
+p a5.S 9 & p a5.S 9\cr
+p a3.A 9 & p a3.A 9\cr
+p a7.A 9 & p a7.A 9\cr
+p 9 a3.$\gamma$ & p 9 a3.$\gamma$\cr
+p 9 ad.s.1.1 & p 9 ad.s.1.1\cr
+p ad.s.1.1 a7.$\alpha$ & p ad.s.1.1 a7.$\alpha$\cr
+s d.nr1 $\alpha$ & s d.nr1 $\alpha$\cr
+s d.nc1 C & s d.nc1 C\cr
+s d.dr1 $\alpha$ & s d.dr1 0\cr
+s d.dc1 C & s d.dc1 0\cr
+s d.pl1 D10 & s d.pl1 R8\cr
+s d.ro1 RO & s d.ro1 RO\cr
+s d.an1 1 & s d.an1 4\cr
+s d.il1 NI & s d.il1 NI\cr
+s d.da A & s d.ra A\cr
+}
+
+Notes
+
+{\advance\leftskip 0.5in
+\item{1.} Only 10-digit numerators, denominators, and radicands are supported.
+\item{2.} Accumulator 2 is assumed for the quotient, Accumulator 3 for the numerator or radicand,
+Accumulator 5 for the denominator or square root, and Accumulator 7 for the shift accumulator.
+
+}
+
+\vfill\eject
+\noindent
+{\bf Function Tables}
+
+Terminals
+
+{\advance\leftskip 0.75in
+\item{\tt arg:} Argument input termal
+\item{\tt A, B:} Function output terminals
+\item{\tt NC, C:} Argument reception NC and C program pulse output terminals
+\item{\tt $n$i:} Program input terminals ($1\le n\le 11$)
+\item{\tt $n$o:} Program output terminals ($1\le n\le 11$)
+
+}
+
+Switches
+
+{\advance\leftskip 0.75in
+\item{\tt op$n$:} Operation ($1\le n\le 11$): {\tt A-2}, {\tt A-1}, ..., {\tt A+2}, {\tt S-2}, ..., {\tt S+2}
+\item{\tt cl$n$:} Argument reception ($1\le n\le 11$): {\tt 0}, {\tt C}, or {\tt NC}
+\item{\tt rp$n$:} Operation repeat ($1\le n\le 11$): 1--9
+\item{\tt mpm$n$:} Master PM switch ($1\le n\le 2$): {\tt P} or {\tt M}
+\item{\tt A$n$C:}
+\item{\tt B$n$C:} Constant digit ($1\le n\le 4$): 0--9, {\tt PM1}, or {\tt PM2}
+\item{\tt A$n$D:}
+\item{\tt B$n$D:} Digit delete ($1\le n\le 4$): {\tt O} or {\tt D}
+\item{\tt A$n$S:}
+\item{\tt B$n$S:} Subtract pulse ($4\le n\le 10$): {\tt 0} or {\tt S}
+\item{\tt RA$r$L$d$:}
+\item{\tt RB$r$L$d$:} Switch panel digit ($-2\le r\le 101$, $1\le d\le 6$): 0--9
+\item{\tt RA$r$S:}
+\item{\tt RB$r$S:} Switch panel sign ($-2\le r\le 101$): {\tt P} or {\tt M}
+\item{\tt Ninep:} Adapter PX-4-119 (c.f. Sec 7.4): Ninep or Cpp
+
+}
+
+\vskip 12pt
+\noindent
+{\bf Master Programmer}
+
+Terminals
+
+{\advance\leftskip 1in
+\item{\tt $n$di:} Decade direct input ($1\le n\le 20$)
+\item{{\tt Adi}--{\tt Kdi:}} Stepper direct input
+\item{{\tt Ai}--{\tt Ki:}} Stepper input
+\item{{\tt Acdi}--{\tt Kcdi:}} Stepper clear input
+\item{{\tt A$n$o}--{\tt K$n$o:}} Stepper output ($1\le n\le 6$)
+
+}
+
+Switches
+
+{\advance\leftskip 1in
+\item{\tt a$n$:} Decade associator switch ($n\in \lbrace 2, 4, 8, 10, 12, 14, 18, 20\rbrace$): {\tt A}--{\tt K}
+\item{\tt d$n$s$m$:} Decade switch ($1\le n\le 20$, $1\le m\le 6$): 0--9
+\item{{\tt cA}--{\tt cK:}} Stepper clear: 1--6
+
+}
+
+\vskip 12pt
+\noindent
+{\bf Adapters}
+
+Types
+
+{\advance\leftskip 0.5in
+\item{\tt dp:} Digit program pulse, e.g. {\tt ad.dp.1.11} for sign
+\item{\tt s:} Shift, $>0$ left, $<0$ right
+\item{\tt d:} Deleter, e.g. {\tt ad.d.1.7} for xxxxxxxxxx $\to$ xxxxxxx000,
+{\tt ad.d.2.-7} for xxxxxxxxxx $\to$ 0000000xxx
+\item{\tt sd:} Special digit (used in A.G. Chapter 7)
+
+}
+
+\vfill\eject\end
