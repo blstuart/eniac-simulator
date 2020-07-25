@@ -3,7 +3,7 @@
 This is a pulse-level simulator of the ENIAC.
 The current state of the simulator covers all
 of the functionality as originally constructed
-at the University of Penssylvania.
+at the University of Pennsylvania.
 Future plans include implementing the enhancements
 that were made at the Ballistics Research Lab
 during its operational life.
