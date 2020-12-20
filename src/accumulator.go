@@ -295,7 +295,7 @@ func su1(unit int) int {
 		x = su1(u.rbuddy)
 	}
 	for i := 0; i < 12; i++ {
-		if u.inff1[i] {
+		if u.inff1[i] || u.inff2[i] {
 			switch u.opsw[i] {
 			case 0:
 				x |= stα
@@ -399,7 +399,6 @@ func accrecv(unit, dat int) {
 func docpp(u *accumulator, resp chan int, cyc int) {
 	for i := 0; i < 4; i++ {
 		if u.inff2[i] {
-			u.inff1[i] = false
 			u.inff2[i] = false
 		}
 	}
@@ -408,7 +407,6 @@ func docpp(u *accumulator, resp chan int, cyc int) {
 		rstrep := false
 		for i := 4; i < 12; i++ {
 			if u.inff2[i] && u.rep == int(u.rptsw[i-4])+1 {
-				u.inff1[i] = false
 				u.inff2[i] = false
 				rstrep = true
 				t := (i-4)*2 + 5
@@ -484,6 +482,7 @@ func dorp(u *accumulator) {
 		for i := 0; i < 12; i++ {
 			if u.inff1[i] {
 				u.inff2[i] = true
+				u.inff1[i] = false
 				if i >= 4 {
 					u.h50 = true
 				}
