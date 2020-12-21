@@ -1,8 +1,9 @@
 package main
 
 import (
-	//	"time"
+	"time"
 	"fmt"
+	"strconv"
 )
 
 const (
@@ -51,6 +52,7 @@ var clocks = []int{
 var cmode = Cont
 var cyc = 0
 var intbch chan int
+var cyperiod = 0
 
 func cycstat() string {
 	if cyc >= len(clocks) {
@@ -63,6 +65,7 @@ func cycstat() string {
 func cycreset() {
 	oldmode := cmode
 	cmode = Cont
+	cyperiod = 0
 	if intbch != nil && (oldmode == Add || oldmode == Pulse) {
 		intbch <- 1
 	}
@@ -92,6 +95,13 @@ func cyclectl(cch chan [2]string) {
 			default:
 				fmt.Println("cycle unit op swtch value: one of 1p, 1a, co, cy")
 			}
+		case "rate":
+			cyrate, _ := strconv.Atoi(x[1])
+			if cyrate == 0 {
+				cyperiod = 0
+			} else {
+				cyperiod = 500000 / cyrate
+			}
 		default:
 			fmt.Println("cycle unit switch: s cy.op.val")
 		}
@@ -119,9 +129,6 @@ func cycleunit(cch chan pulse, bch chan int) {
 		for cyc = 0; cyc < len(clocks); cyc++ {
 			if cmode == Pulse {
 				<-intbch
-			} else {
-				//time.Sleep(5 * time.Microsecond)
-				//time.Sleep(10 * time.Microsecond)
 			}
 			if cyc == 32 && (initclrff[0] || initclrff[1] || initclrff[2] ||
 				initclrff[3] || initclrff[4] || initclrff[5]) {
@@ -131,15 +138,23 @@ func cycleunit(cch chan pulse, bch chan int) {
 			} else if clocks[cyc] != 0 {
 				p.val = clocks[cyc]
 				cch <- p
+				if cyperiod != 0 {
+					time.Sleep(time.Duration(cyperiod) * time.Microsecond)
+				}
 				<-p.resp
+			} else if cyperiod != 0 {
+				time.Sleep(time.Duration(cyperiod) * time.Microsecond)
 			}
-			//time.Sleep(5 * time.Microsecond)
-			//time.Sleep(20 * time.Microsecond)
 			cyc++
 			if clocks[cyc] != 0 {
 				p.val = clocks[cyc]
 				cch <- p
+				if cyperiod != 0 {
+					time.Sleep(time.Duration(cyperiod) * time.Microsecond)
+				}
 				<-p.resp
+			} else if cyperiod != 0 {
+				time.Sleep(time.Duration(cyperiod) * time.Microsecond)
 			}
 		}
 	}
