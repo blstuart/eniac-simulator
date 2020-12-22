@@ -403,13 +403,13 @@ func multunit(cyctrunk chan pulse) {
 				}
 			}
 			if sigfig == 0 && lhppII != nil {
-				handshake(1<<10, lhppII, resp1)
+				handshake(1<<9, lhppII, resp1)
 			} else if sigfig > 0 && sigfig < 9 && lhppI != nil {
 				handshake(1<<uint(sigfig-1), lhppI, resp1)
 			}
 		case c.val&Fourp != 0 && stage == 1:
 			if sigfig == 0 && lhppII != nil {
-				handshake(1<<10, lhppII, resp1)
+				handshake(1<<9, lhppII, resp1)
 			} else if sigfig > 0 && sigfig < 9 && lhppI != nil {
 				handshake(1<<uint(sigfig-1), lhppI, resp1)
 			}
