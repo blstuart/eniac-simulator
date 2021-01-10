@@ -105,7 +105,7 @@ s p.d16s6 0
 s p.d15s6 0
 s p.d14s6 1
 p 4-2 p.Hi
-p p.H1o 4-3
+p p.H1o 5-1
 s p.d7s1 3
 s p.d6s1 0
 s p.d5s1 0
@@ -373,22 +373,23 @@ p m.4o 3-6
 p 3-6 a18.4i
 s a18.op4 α
 s a18.cc4 0
-p a13.6o 3-4
-p 3-4 a15.5i
+p 3-6 a15.5i
 p a15.5o 2-5
 s a15.op5 ε
 s a15.cc5 C
 s a15.rp5 1
 
 #
-# A trajectory calculation.  For this first cut, we're
-# using a simple constant drag value and simple
+# A trajectory calculation.  For this version, we're
+# using a drag table I tried to figure out and simple
 # rectangular integration with a delta-t of 0.01s.
 #
 p 1 a4.α
 p 1 a6.α
 p 3 a9.δ
-p 1-4 a4.1i
+p 2 a10.γ
+p 3 a10.δ
+p 1-4 a4.1i	# Load the initial y' and x'
 p 1-4 c.19i
 p 1-4 a10.10i
 s a4.op1 α
@@ -402,7 +403,51 @@ p 4-1 c.14i
 s a6.op2 α
 s c.s14 Flr
 p c.14o 4-2
-p a4.A 2
+p 5-1 a4.3i	# Compute x'^2+y'^2 to look up the
+p 5-1 m.7i	# drag coefficient from a table
+s a4.op3 A
+s a4.cc3 0
+s m.ieracc7 β
+s m.iercl7 C
+s m.icandacc7 γ
+s m.icandcl7 C
+s m.place7 10
+s m.sf7 7
+s m.prod7 0
+p m.7o 5-2
+p 5-2 a6.3i
+p 5-2 m.8i
+s a6.op3 A
+s a6.cc3 0
+s m.ieracc8 δ
+s m.iercl8 C
+s m.icandacc8 δ
+s m.icandcl8 C
+s m.place8 10
+s m.sf8 0
+s m.prod8 AC
+p m.8o 5-3
+p 1 ad.s.6.-3
+p ad.s.6.-3 a7.α
+p 5-3 a7.5i
+s a7.op5 α
+s a7.cc5 0
+p a7.5o 5-4	# 5-4 triggers the table lookup
+p 5-4 f2.1i
+p f2.C 5-5	# 5-5 reads the argument
+p 5-5 a7.6i
+p a7.A 1
+p 1 f2.arg
+p f2.A 1
+s a7.op6 A
+s a7.cc6 C
+s a7.rp6 1
+s f2.op1 A0
+s f2.cl1 C
+s f2.rp1 1
+l drag.e
+p a7.6o 4-3
+p a4.A 2		# Update x and y from x' and y'
 p a6.A 3
 p 2 ad.s.4.-2
 p ad.s.4.-2 a3.δ
@@ -412,7 +457,7 @@ p 4-3 a3.5i
 p 4-3 a4.2i
 p 4-3 a5.1i
 p 4-3 a6.1i
-p 4-3 a9.9i
+p 4-3 a10.11i
 s a3.op5 δ
 s a3.cc5 0
 s a3.rp5 1
@@ -422,19 +467,25 @@ s a5.op1 δ
 s a5.cc1 0
 s a6.op1 A
 s a6.cc1 0
-s a9.op9 β
-s a9.cc9 0
-s a9.rp9 1
-p a3.5o 4-4
+s a10.op11 γ
+s a10.cc11 0
+s a10.rp11 1
+p a3.5o 5-6	# start a dummy program to delay the
+p 5-6 a7.7i	# start of multiply until after ft read is
+s a7.op7 0	# done
+s a7.cc7 C
+s a7.rp7 1
+p a7.7o 4-4
 p 4-4 m.5i
-p 4-4 c.8i
+p 1 ad.s.7.4
+p ad.s.7.4 a9.ε
 s c.s8 Dlr
-s m.ieracc5 0
-s m.iercl5 C
-s m.icandacc5 α
-s m.icandcl5 0
+s m.ieracc5 ε
+s m.iercl5 0
+s m.icandacc5 0
+s m.icandcl5 C
 s m.sf5 0
-s m.place5 10
+s m.place5 6
 s m.prod5 SC
 p m.5o 4-5
 p 4-5 a4.5i
@@ -450,12 +501,12 @@ s a4.rp6 1
 s c.s13 Elr
 p a4.6o 4-7
 p 4-7 m.6i
-s m.ieracc6 δ
+s m.ieracc6 0
 s m.iercl6 C
-s m.icandacc6 0
+s m.icandacc6 δ
 s m.icandcl6 C
 s m.sf6 0
-s m.place6 10
+s m.place6 6
 s m.prod6 SC
 p 4-7 a6.4i
 s a6.op4 A
