@@ -2,9 +2,9 @@
 # sum of the cubes of the digits
 
 # Initiating unit
-p i.io 1-1
-p 1-5 i.pi
-p i.po 2-1
+p i.Io 1-1
+p 1-5 i.Pi
+p i.Po 2-1
 
 # Master Programmer
 s p.cA 2

@@ -153,7 +153,9 @@ p 1-7 a9.7i
 p 1-7 a10.7i
 p 1-7 c.2i
 s a9.op7 α
+s a9.rp7 1
 s a10.op7 α
+s a10.rp7 1
 s c.s2 Blr
 # s c.j5 1
 # s c.j4 3
@@ -234,8 +236,8 @@ s a18.op7 ε
 s a18.cc7 C
 s a18.rp7 1
 p a16.7o 2-5
-p 2-5 i.pi
-p i.po 1-3
+p 2-5 i.Pi
+p i.Po 1-3
 
 p 2-6 a15.1i
 p 2-6 a16.1i
@@ -317,6 +319,7 @@ p 1 ad.s.3.1
 p ad.s.3.1 a10.β
 s a10.op9 β
 s a10.cc9 0
+s a10.rp9 1
 p 2-11 c.7i
 s c.s7 Clr
 # s c.k5 9
@@ -432,6 +435,7 @@ p ad.s.6.-3 a7.α
 p 5-3 a7.5i
 s a7.op5 α
 s a7.cc5 0
+s a7.rp5 1
 p a7.5o 5-4	# 5-4 triggers the table lookup
 p 5-4 f2.1i
 p f2.C 5-5	# 5-5 reads the argument
