@@ -38,7 +38,7 @@ p i.Io 1-1
 s p.cA 6
 s p.cB 6
 s p.cC 6
-s p.cH 6
+s p.cH 3
 s p.a20 B
 s p.a18 B
 s p.a14 C
@@ -55,7 +55,7 @@ p p.B2o 2-6
 p p.B3o 2-2
 p p.B4o 2-11
 p p.B5o 3-1
-p p.B6o 1-11
+p p.B6o 3-10
 s p.d20s1 1
 s p.d19s1 0
 s p.d18s1 0
@@ -104,16 +104,22 @@ s p.d17s6 0
 s p.d16s6 0
 s p.d15s6 0
 s p.d14s6 1
-p 4-2 p.Hi
+p 1-4 p.Hi
 p p.H1o 5-1
-s p.d7s1 3
-s p.d6s1 0
+p p.H2o 2-5
+p p.H3o 5-10
+s p.d7s1 0
+s p.d6s1 1
 s p.d5s1 0
 s p.d4s1 0
 s p.d7s2 0
 s p.d6s2 0
 s p.d5s2 0
 s p.d4s2 1
+s p.d7s3 0
+s p.d6s3 0
+s p.d5s3 0
+s p.d4s3 1
 
 #
 # The first demo is adding the number 97367 to itself 5000
@@ -237,7 +243,7 @@ s a18.cc7 C
 s a18.rp7 1
 p a16.7o 2-5
 p 2-5 i.Pi
-p i.Po 1-3
+p i.Po 1-1
 
 p 2-6 a15.1i
 p 2-6 a16.1i
@@ -392,20 +398,41 @@ p 1 a6.α
 p 3 a9.δ
 p 2 a10.γ
 p 3 a10.δ
-p 1-4 a4.1i	# Load the initial y' and x'
-p 1-4 c.19i
-p 1-4 a10.10i
-s a4.op1 α
-s c.s19 Glr
+p 3-10 a4.4i
+s a4.op4 0
+s a4.cc4 C
+p 3-10 a6.6i
+s a6.op6 0
+s a6.cc6 C
+s a6.rp6 1
+p 3-10 a15.3i
+s a15.op3 0
+s a15.cc3 C
+p 3-10 a18.11i
+s a18.op11 0
+s a18.cc11 C
+p 3-10 a20.3i
+s a20.op3 0
+s a20.cc3 C
+p 3-10 a10.10i
 s a10.op10 0
 s a10.cc10 C
 s a10.rp10 1
+p a10.10o 3-11
+p 3-11 a4.1i	# Load the initial y' and x'
+p 3-11 c.19i
+s a4.op1 α
+s c.s19 Glr
 p c.19o 4-1
+p 4-1 a15.12i
+s a15.op12 ε
+s a15.cc12 C
+s a15.rp12 1
 p 4-1 a6.2i
 p 4-1 c.14i
 s a6.op2 α
 s c.s14 Flr
-p c.14o 4-2
+p c.14o 1-11
 p 5-1 a4.3i	# Compute x'^2+y'^2 to look up the
 p 5-1 m.7i	# drag coefficient from a table
 s a4.op3 A
@@ -454,27 +481,28 @@ p a7.6o 4-3
 p a4.A 2		# Update x and y from x' and y'
 p a6.A 3
 p 2 ad.s.4.-2
-p ad.s.4.-2 a3.δ
+p ad.s.4.-2 a20.δ
 p 3 ad.s.5.-2
-p ad.s.5.-2 a5.δ
-p 4-3 a3.5i
+p ad.s.5.-2 a18.δ
+p 4-3 a20.7i
 p 4-3 a4.2i
-p 4-3 a5.1i
+p 4-3 a18.12i
 p 4-3 a6.1i
 p 4-3 a10.11i
-s a3.op5 δ
-s a3.cc5 0
-s a3.rp5 1
+s a20.op7 δ
+s a20.cc7 0
+s a20.rp7 1
 s a4.op2 A
 s a4.cc2 0
-s a5.op1 δ
-s a5.cc1 0
+s a18.op12 δ
+s a18.cc12 0
+s a18.rp12 1
 s a6.op1 A
 s a6.cc1 0
 s a10.op11 γ
 s a10.cc11 0
 s a10.rp11 1
-p a3.5o 5-6	# start a dummy program to delay the
+p a20.7o 5-6	# start a dummy program to delay the
 p 5-6 a7.7i	# start of multiply until after ft read is
 s a7.op7 0	# done
 s a7.cc7 C
@@ -520,7 +548,21 @@ p 4-8 a6.5i
 s a6.op5 α
 s a6.cc5 C
 s a6.rp5 1
-p a6.5o 4-2
+p a6.5o 1-4
+p a20.S ad.dp.1.11
+p ad.dp.1.11 5-11
+p 5-10 a20.12i
+s a20.op12 S
+s a20.cc12 0
+s a20.rp12 1
+p 5-10 a15.4i
+s a15.op4 ε
+s a15.cc4 C
+p 5-11 a19.5i
+s a19.op5 0
+s a19.cc5 0
+s a19.rp5 1
+p a19.5o 1-4
 
 #
 # Full multiplier configuration for 20-digit
