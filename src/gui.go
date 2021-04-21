@@ -279,6 +279,28 @@ func gui() {
 	}
 }
 
+func findimages() string {
+	_, e := os.Stat("images")
+	if e == nil {
+		return ""
+	}
+	_, e = os.Stat("../images")
+	if e == nil {
+		return "../"
+	}
+	home, ex := os.LookupEnv("home")
+	if !ex  {
+		home, ex = os.LookupEnv("HOME")
+	}
+	if ex {
+		_, e = os.Stat(home + "lib/eniac/images")
+		if e != nil {
+			return home + "lib/eniac/"
+		}
+	}
+	return ""
+}
+
 func innergui() {
 	var nname string
 	var x, y int
@@ -326,15 +348,16 @@ func innergui() {
 	} else {
 		fmt.Fprintf(gpipe, "wm geometry . %dx%d\n", width, height+32)
 	}
-	fmt.Fprintf(gpipe, "image create photo enimg -file images/e%d.ppm\n", width)
-	fmt.Fprintf(gpipe, "image create photo s1img -file images/e%ds1.ppm\n", width)
-	fmt.Fprintf(gpipe, "image create photo s2img -file images/e%ds2.ppm\n", width)
-	fmt.Fprintf(gpipe, "image create photo s3img -file images/e%ds3.ppm\n", width)
-	fmt.Fprintf(gpipe, "image create photo s4img -file images/e%ds4.ppm\n", width)
-	fmt.Fprintf(gpipe, "image create photo s5img -file images/e%ds5.ppm\n", width)
+	prefix := findimages()
+	fmt.Fprintf(gpipe, "image create photo enimg -file %simages/e%d.ppm\n", prefix, width)
+	fmt.Fprintf(gpipe, "image create photo s1img -file %simages/e%ds1.ppm\n", prefix, width)
+	fmt.Fprintf(gpipe, "image create photo s2img -file %simages/e%ds2.ppm\n", prefix, width)
+	fmt.Fprintf(gpipe, "image create photo s3img -file %simages/e%ds3.ppm\n", prefix, width)
+	fmt.Fprintf(gpipe, "image create photo s4img -file %simages/e%ds4.ppm\n", prefix, width)
+	fmt.Fprintf(gpipe, "image create photo s5img -file %simages/e%ds5.ppm\n", prefix, width)
 	fmt.Fprintln(gpipe, "label .eniac -borderwidth 0 -image enimg")
 	fmt.Fprintln(gpipe, "place .eniac -x 0 -y 0")
-	fmt.Fprintln(gpipe, "image create photo ctlimg -file images/control.ppm")
+	fmt.Fprintf(gpipe, "image create photo ctlimg -file %simages/control.ppm\n", prefix)
 	fmt.Fprintln(gpipe, "label .control -borderwidth 2 -image ctlimg")
 	fmt.Fprintln(gpipe, "label .cmode -font [list Clean 10] -borderwidth 1 -width 7 -height 1")
 	butparam := "-borderwidth 0 -font [list Clean 10] -pady 0"
@@ -438,14 +461,14 @@ func innergui() {
 		fmt.Fprintf(gpipe, "place .s5but -x %d -y %d\n", width/10+100, height+11)
 		fmt.Fprintf(gpipe, "place .perspbut -x %d -y %d\n", width/10+182, height+11)
 	}
-	fmt.Fprintln(gpipe, "image create photo neon -file images/orange.ppm")
+	fmt.Fprintf(gpipe, "image create photo neon -file %simages/orange.ppm\n", prefix)
 	if width >= 1600 {
-		fmt.Fprintln(gpipe, "image create photo neon2 -file images/orange3.ppm")
+		fmt.Fprintf(gpipe, "image create photo neon2 -file %simages/orange3.ppm\n", prefix)
 	} else {
-		fmt.Fprintln(gpipe, "image create photo neon2 -file images/orange2.ppm")
+		fmt.Fprintf(gpipe, "image create photo neon2 -file %simages/orange2.ppm\n", prefix)
 	}
-	fmt.Fprintln(gpipe, "image create photo gpilot1 -file images/gpilot.ppm")
-	fmt.Fprintln(gpipe, "image create photo apilot1 -file images/apilot.ppm")
+	fmt.Fprintf(gpipe, "image create photo gpilot1 -file %simages/gpilot.ppm\n", prefix)
+	fmt.Fprintf(gpipe, "image create photo apilot1 -file %simages/apilot.ppm\n", prefix)
 	// Initiating unit
 	fmt.Fprintln(gpipe, "image create photo gpilot2")
 	fmt.Fprintf(gpipe, "gpilot2 copy gpilot1 -subsample %d %d\n", 16000/width, 13000/width)
