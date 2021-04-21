@@ -317,6 +317,7 @@ func proccmd(cmd string) int {
 			fmt.Println("Invalid jack spec: ", p2)
 		}
 	case "q":
+		guistate.proc.Kill()
 		return -1
 	case "r":
 		if len(f) != 2 {

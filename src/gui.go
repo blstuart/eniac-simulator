@@ -14,11 +14,17 @@ import (
 )
 
 type gstat struct {
-	guimode                                                int
-	lastinit, lastcyc, lastmp, lastdiv, lastmult, lastcons string
-	lastft                                                 [3]string
-	lastacc                                                [20]string
-	upd                                                    chan int
+	guimode int
+	lastinit,
+	lastcyc,
+	lastmp,
+	lastdiv,
+	lastmult,
+	lastcons string
+	lastft  [3]string
+	lastacc [20]string
+	upd     chan int
+	proc *os.Process
 }
 
 var guistate gstat
@@ -285,6 +291,7 @@ func innergui() {
 	gpipe, _ := cmd.StdinPipe()
 	cpipe, _ := cmd.StdoutPipe()
 	cmd.Start()
+	guistate.proc = cmd.Process
 	fmt.Fprintln(gpipe, "wm geometry . +5+5")
 	sc := bufio.NewScanner(cpipe)
 	if width == 0 {
