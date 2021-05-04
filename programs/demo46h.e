@@ -2,7 +2,7 @@
 # An attempt to recreate the demo at the unveiling of the ENIAC
 # on Feb 15, 1946
 #
-# Using Euler's method for integration on the artillery trajectory.
+# Using Heun's method for integration on the artillery trajectory.
 #
 
 #
@@ -111,8 +111,8 @@ p p.H1o 5-1
 p p.H2o 2-5
 p p.H3o 5-10
 s p.d7s1 0
-s p.d6s1 1
-s p.d5s1 0
+s p.d6s1 0
+s p.d5s1 5
 s p.d4s1 0
 s p.d7s2 0
 s p.d6s2 0
@@ -203,7 +203,9 @@ s a13.rp9 1
 
 #
 # The next step is compute a table of squares and
-# cubes, first with printing, then without.
+# cubes, first with printing, then without.  The second
+# pass uses a17 instead of a18 to free up programs
+# on a18 for the artillery trajectory.
 #
 p a15.A 1
 p a16.A 1
@@ -254,43 +256,43 @@ s a15.op1 0
 s a15.cc1 C
 s a16.op1 0
 s a16.cc1 C
-s a18.op1 0
-s a18.cc1 C
+# s a18.op1 0
+# s a18.cc1 C
 
 p 2-2 a16.8i
-p 2-2 a18.8i
+p 2-2 a17.8i
 s a16.op8 A
 s a16.cc8 0
 s a16.rp8 3
-s a18.op8 α
-s a18.cc8 0
-s a18.rp8 3
+s a17.op8 α
+s a17.cc8 0
+s a17.rp8 3
 p a16.8o 2-7
 p 2-7 a15.9i
 p 2-7 a16.9i
-p 2-7 a18.9i
+p 2-7 a17.9i
 s a15.op9 A
 s a15.cc9 0
 s a15.rp9 3
 s a16.op9 α
 s a16.cc9 0
 s a16.rp9 2
-s a18.op9 α
-s a18.cc9 0
-s a18.rp9 3
+s a17.op9 α
+s a17.cc9 0
+s a17.rp9 3
 p a15.9o 2-8
 p 2-8 a15.10i
 p 2-8 a16.10i
-p 2-8 a18.10i
+p 2-8 a17.10i
 s a15.op10 ε
 s a15.cc10 C
 s a15.rp10 1
 s a16.op10 ε
 s a16.cc10 C
 s a16.rp10 1
-s a18.op10 ε
-s a18.cc10 C
-s a18.rp10 1
+s a17.op10 ε
+s a17.cc10 C
+s a17.rp10 1
 p a16.10o 1-3
 
 s pr.11-12 C
@@ -311,6 +313,9 @@ p 2-11 a15.2i
 p 2-11 a16.2i
 p 2-11 a18.2i
 p 2-11 a20.2i
+p 2-11 a17.3i
+s a17.op3 0
+s a17.cc3 C
 p a18.A 2
 p 2 ad.s.2.3
 p ad.s.2.3 a20.α
@@ -400,45 +405,48 @@ p 1 a6.α
 p 3 a9.δ
 p 2 a10.γ
 p 3 a10.δ
-p 3-10 a4.4i
+p 3-10 a4.4i			# a4.4: 3-10 0C
 s a4.op4 0
 s a4.cc4 C
-p 3-10 a6.6i
+p 3-10 a6.6i			# a6.6: 3-10 0C1
 s a6.op6 0
 s a6.cc6 C
 s a6.rp6 1
-p 3-10 a15.3i
+p 3-10 a15.3i			# a15.3: 3-10 0C
 s a15.op3 0
 s a15.cc3 C
-p 3-10 a18.11i
+p 3-10 a18.11i		# a18.11: 3-10 0C1
 s a18.op11 0
 s a18.cc11 C
-p 3-10 a20.3i
+s a18.rp11 1
+p 3-10 a20.3i			# a20.3: 3-10 0C
 s a20.op3 0
 s a20.cc3 C
-p 3-10 a10.10i
+p 3-10 a10.10i		# a10.10: 3-10 0C1 3-11
 s a10.op10 0
 s a10.cc10 C
 s a10.rp10 1
 p a10.10o 3-11
-p 3-11 a4.1i	# Load the initial y' and x'
-p 3-11 c.19i
+p 3-11 a4.1i			# a4.1: 3-11 α(1)0  - Load the initial y' and x'
 s a4.op1 α
+s a4.cc1 0
+p 3-11 c.19i			# c.19: 3-11 Glr 4-1
 s c.s19 Glr
 p c.19o 4-1
-p 4-1 a15.12i
+p 4-1 a15.12i			# a15.12: 4-1 ε(0)C1
 s a15.op12 ε
 s a15.cc12 C
 s a15.rp12 1
-p 4-1 a6.2i
-p 4-1 c.14i
+p 4-1 a6.2i			# a6.2: 4-1 α(1)0
 s a6.op2 α
+s a6.cc2 0
+p 4-1 c.14i			# c.14: 4-1 Flr 1-11
 s c.s14 Flr
 p c.14o 1-11
-p 5-1 a4.3i	# Compute x'^2+y'^2 to look up the
-p 5-1 m.7i	# drag coefficient from a table
-s a4.op3 A
+p 5-1 a4.3i			# a4.3: 5-1 A(2)0   - Compute x'^2+y'^2 to look up the
+s a4.op3 A			# drag coefficient from a table
 s a4.cc3 0
+p 5-1 m.7i			# m.7: 5-1 β(2)C γ(2)C 10 7 0 5-2
 s m.ieracc7 β
 s m.iercl7 C
 s m.icandacc7 γ
@@ -447,10 +455,10 @@ s m.place7 10
 s m.sf7 7
 s m.prod7 0
 p m.7o 5-2
-p 5-2 a6.3i
-p 5-2 m.8i
+p 5-2 a6.3i			# a6.3: 5-2 A(3)0
 s a6.op3 A
 s a6.cc3 0
+p 5-2 m.8i			# m.8: 5-2 δ(3)C δ(3)C 10 0 AC 5-3
 s m.ieracc8 δ
 s m.iercl8 C
 s m.icandacc8 δ
@@ -461,59 +469,58 @@ s m.prod8 AC
 p m.8o 5-3
 p 1 ad.s.6.-3
 p ad.s.6.-3 a7.α
-p 5-3 a7.5i
+p 5-3 a7.5i			# a7.5: 5-3 α(ad1)01 5-4
 s a7.op5 α
 s a7.cc5 0
 s a7.rp5 1
-p a7.5o 5-4	# 5-4 triggers the table lookup
-p 5-4 f2.1i
-p f2.C 5-5	# 5-5 reads the argument
-p 5-5 a7.6i
+p a7.5o 5-4			# 5-4 triggers the table lookup
+p 5-4 f2.1i			# f2.1: 5-4 A0C1
+p f2.C 5-5			# 5-5 reads the argument
 p a7.A 1
 p 1 f2.arg
 p f2.A 1
-s a7.op6 A
-s a7.cc6 C
-s a7.rp6 1
 s f2.op1 A0
 s f2.cl1 C
 s f2.rp1 1
 l drag.e
+p 5-5 a7.6i			# a7.6: 5-5 A(1)C1 4-3
+s a7.op6 A
+s a7.cc6 C
+s a7.rp6 1
 p a7.6o 4-3
-p a4.A 2		# Update x and y from x' and y'
+p a4.A 2				# Update x and y from x' and y'
 p a6.A 3
 p 2 ad.s.4.-2
 p ad.s.4.-2 a20.δ
 p 3 ad.s.5.-2
 p ad.s.5.-2 a18.δ
-p 4-3 a20.7i
-p 4-3 a4.2i
-p 4-3 a18.12i
-p 4-3 a6.1i
-p 4-3 a10.11i
+p 4-3 a20.7i			# a20.7: 4-3 δ(ad2)01 5-6
 s a20.op7 δ
 s a20.cc7 0
 s a20.rp7 1
+p a20.7o 5-6
+p 4-3 a4.2i			# a4.2: 4-3 A(2)0
 s a4.op2 A
 s a4.cc2 0
+p 4-3 a18.12i			# a18.12: 4-3 δ(ad3)01
 s a18.op12 δ
 s a18.cc12 0
 s a18.rp12 1
+p 4-3 a6.1i			# a6.3: 4-3 A(3)0
 s a6.op1 A
 s a6.cc1 0
+p 4-3 a10.11i			# a10.11: 4-3 γ(2)01
 s a10.op11 γ
 s a10.cc11 0
 s a10.rp11 1
-p a20.7o 5-6	# start a dummy program to delay the
-p 5-6 a7.7i	# start of multiply until after ft read is
-s a7.op7 0	# done
-s a7.cc7 C
-s a7.rp7 1
+p 5-6 a7.7i			# a7.7: 5-6 0C1 4-4
+s a7.op7 0			# start a dummy program to delay the
+s a7.cc7 C			# start of multiply until after ft read is
+s a7.rp7 1			# done
 p a7.7o 4-4
-p 4-4 m.5i
 p 1 ad.s.7.4
 p ad.s.7.4 a9.ε
-# s c.s8 Dlr
+p 4-4 m.5i			# m.5: 4-4 ε(ad1)0 0C 0 6 SC 4-5
 s m.ieracc5 ε
 s m.iercl5 0
 s m.icandacc5 0
@@ -522,19 +529,21 @@ s m.sf5 0
 s m.place5 6
 s m.prod5 SC
 p m.5o 4-5
-p 4-5 a4.5i
-s a4.op5 α
-s a4.cc5 C
-s a4.rp5 1
-p a4.5o 4-6
-p 4-6 a4.6i
-p 4-6 c.13i
-s a4.op6 α
-s a4.cc6 C
-s a4.rp6 1
+p 1 a5.α
+p 2 a5.β
+p a5.A 2
+p 4-5 a5.5i			# a5.5: 4-5 α(1)C1 4-6
+s a5.op5 α
+s a5.cc5 C
+s a5.rp5 1
+p a5.5o 4-6
+p 4-6 a5.6i			# a5.6: 4-6 α(1)C1
+s a5.op6 α
+s a5.cc6 C
+s a5.rp6 1
+p 4-6 c.13i			# c.13: Elr
 s c.s13 Elr
-p a4.6o 4-7
-p 4-7 m.6i
+p 4-6 m.6i			# m.6 4-6 0C δ(3)C 0 6 SC 4-8
 s m.ieracc6 0
 s m.iercl6 C
 s m.icandacc6 δ
@@ -542,16 +551,157 @@ s m.icandcl6 C
 s m.sf6 0
 s m.place6 6
 s m.prod6 SC
-p 4-7 a6.4i
-s a6.op4 A
-s a6.cc4 0
 p m.6o 4-8
-p 4-8 a6.5i
-s a6.op5 α
-s a6.cc5 C
+p 4-6 a6.9i			# a6.9: 4-6 A(3)01 4-2
+s a6.op9 A
+s a6.cc9 0
+p a6.9o 4-2
+p 4-2 a5.7i			# a5.7: 4-2 A(2)01 4-7
+s a5.op7 A
+s a5.cc7 0
+s a5.rp7 1
+p a5.7o 4-7
+p 2 a4.β
+p 4-2 a4.5i			# a4.5: 4-2 β(2)01
+s a4.op5 β
+s a4.cc5 0
+s a4.rp5 1
+p 4-7 a5.8i			# a5.8: 4-7 β(2)01
+s a5.op8 β
+s a5.cc8 0
+s a5.rp8 1
+p 4-7 a4.6i			# a4.6: 4-7 A(2)01
+s a4.op6 A
+s a4.cc6 0
+s a4.rp6 1
+p 1 a8.α
+p 3 a8.β
+p a8.A 3
+p 4-8 a8.5i			# a8.5: 4-8 α(1)01 4-9
+s a8.op5 α
+s a8.cc5 0
+s a8.rp5 1
+p a8.5o 4-9
+p 4-9 a8.6i			# a8.6: 4-9 A(3)01 4-10
+s a8.op6 A
+s a8.cc6 0
+s a8.rp6 1
+p a8.6o 4-10
+p 3 a6.γ
+p 4-9 a6.5i			# a6.5: 4-9 γ(3)01
+s a6.op5 γ
+s a6.cc1 0
 s a6.rp5 1
-p a6.5o 1-4
-p a20.S ad.dp.1.11
+p 4-10 a6.8i			# a6.8: 4-10 A(3)01
+s a6.op8 A
+s a6.cc8 0
+s a6.rp8 1
+p 4-10 a8.7i			# a8.7: 4-10 β(3)01 4-11
+s a8.op7 β
+s a8.cc7 0
+s a8.rp7 1
+p a8.7o 4-11
+p 4-11 a5.1i			# a5.1: 4-11 A(2)0
+s a5.op1 A
+s a5.cc1 0
+p 4-11 m.9i			# m.9: 4-11 β(2)C γ(2)C 10 7 0 5-7
+s m.ieracc9 β
+s m.iercl9 C
+s m.icandacc9 γ
+s m.icandcl9 C
+s m.place9 10
+s m.sf9 7
+s m.prod9 0
+p m.9o 5-7
+p 5-7 a8.1i			# a8.1: 5-7 A(3)0
+s a8.op1 A
+s a8.cc1 0
+p 5-7 m.10i			# m.10: 5-7 δ(3)C δ(3)C 10 0 AC 5-8
+s m.ieracc10 δ
+s m.iercl10 C
+s m.icandacc10 δ
+s m.icandcl10 C
+s m.place10 10
+s m.sf10 0
+s m.prod10 AC
+p m.10o 5-8
+p 5-8 a7.8i			# a7.8: 5-8 α(ad1)01 5-9
+s a7.op8 α
+s a7.cc8 0
+s a7.rp8 1
+p a7.8o 5-9
+p 5-9 f2.2i			# f2.2: 5-9 A0NC1
+s f2.op2 A0
+s f2.cl2 NC
+s f2.rp2 1
+p f2.NC 6-1
+p 6-1 a7.9i			# a7.9: 6-1 A(1)C1 6-2
+s a7.op9 A
+s a7.cc9 C
+s a7.rp9 1
+p a7.9o 6-2
+p 6-2 a5.2i			# a5.2: 6-2 A(2)C
+s a5.op2 A
+s a5.cc2 C
+p 6-2 a20.8i			# a20.8: 6-2 δ(ad2)01 6-3
+s a20.op8 δ
+s a20.cc8 0
+s a20.rp8 1
+p a20.8o 6-3
+p 6-2 a10.12i			# a10.12: 6-2 γ(2)01
+s a10.op12 γ
+s a10.cc12 0
+s a10.rp12 1
+p 6-3 a8.9i			# a8.9: 6-3 A(3)01 6-4
+s a8.op9 A
+s a8.cc9 0
+s a8.rp9 1
+p a8.9o 6-4
+p 6-3 a18.8i			# a18.8: 6-3 δ(ad3)01
+s a18.op8 δ
+s a18.cc8 0
+s a18.rp8 1
+p 6-4 m.11i			# m.11: 6-4 α(1)0 0C 0 6 SC 6-5
+s m.ieracc11 α
+s m.iercl11 0
+s m.icandacc11 0
+s m.icandcl11 C
+s m.sf11 0
+s m.place11 6
+s m.prod11 SC
+p m.11o 6-5
+p 6-5 a4.7i			# a4.7: 6-5 α(1)01 6-6
+s a4.op7 α
+s a4.cc7 0
+s a4.rp7 1
+p a4.7o 6-6
+p 6-6 a4.8i			# a4.8: 6-6 α(1)01 6-7
+s a4.op8 α
+s a4.cc8 0
+s a4.rp8 1
+p a4.8o 6-7
+p 6-6 c.15i			# c.14: 6-6 Elr
+s c.s15 Elr
+p 6-7 a8.8i			# a8.8: 6-7 A(3)C1
+s a8.op8 A
+s a8.cc8 C
+s a8.rp8 1
+p 6-7 m.12i			# m.12: 6-7 00 δC 0 6 SC 6-8
+s m.ieracc12 0
+s m.iercl12 0
+s m.icandacc12 δ
+s m.icandcl12 C
+s m.sf12 0
+s m.place12 6
+s m.prod12 SC
+p m.12o 6-8
+p 6-8 a6.7i			# a6.7: 6-8 α(1)01 1-4
+s a6.op7 α
+s a6.cc7 0
+s a6.rp7 1
+p a6.7o 1-4
+
+p a20.S ad.dp.1.11		# Test y and continue if non-negative
 p ad.dp.1.11 5-11
 p 5-10 a20.12i
 s a20.op12 S
