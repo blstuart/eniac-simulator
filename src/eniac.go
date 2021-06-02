@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -167,6 +168,15 @@ func proccmd(cmd string) int {
 			}
 		}
 		fd.Close()
+	case "L":
+		if len(f) != 5 {
+			fmt.Println("LED matrix support requires 4 accumulators")
+			break
+		}
+		ledacc[0], _ = strconv.Atoi(f[1])
+		ledacc[1], _ = strconv.Atoi(f[2])
+		ledacc[2], _ = strconv.Atoi(f[3])
+		ledacc[3], _ = strconv.Atoi(f[4])
 	case "p":
 		if len(f) != 3 {
 			fmt.Println("Invalid jumper spec", cmd)
@@ -317,7 +327,12 @@ func proccmd(cmd string) int {
 			fmt.Println("Invalid jack spec: ", p2)
 		}
 	case "q":
-		guistate.proc.Kill()
+		if guistate.proc != nil {
+			guistate.proc.Kill()
+		}
+		if ledproc != nil {
+			ledproc.Kill()
+		}
 		return -1
 	case "r":
 		if len(f) != 2 {
@@ -438,22 +453,57 @@ func proccmd(cmd string) int {
 
 //
 //  This code assumes that we're running on a Raspberry Pi
-// with Linux.  We also assume that the necessary exports
-// have already been done.
+// with either Plan9 or Linux.  We also assume that the necessary
+// exports have already been done for Linux.
 //
 func ctlstation() {
-	fd5, err := os.Open("/sys/class/gpio/gpio5/value")
-	if err != nil {
-		return
-	}
-	fd6, _ := os.Open("/sys/class/gpio/gpio6/value")
-	fd13, _ := os.Open("/sys/class/gpio/gpio13/value")
-	fd19, _ := os.Open("/sys/class/gpio/gpio19/value")
-	fd26, _ := os.Open("/sys/class/gpio/gpio26/value")
-	fd21, _ := os.Open("/sys/class/gpio/gpio21/value")
-	fd20, _ := os.Open("/sys/class/gpio/gpio20/value")
+	var fdg, fd5, fd6, fd13, fd19, fd26, fd21, fd20 *os.File
+	var host int
+	var buf []byte
+	var err error
 
-	buf := make([]byte, 1)
+	if runtime.GOOS == "plan9" {
+		host = 1
+		fdg, err = os.OpenFile("#G/gpio", os.O_RDWR, 0)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		_, err = fdg.WriteString("function 5 in\n")
+		if err != nil {
+			fmt.Println("Setting 5 to input", err)
+		}
+		fdg.WriteString("pullup 5\n")
+		fdg.WriteString("function 6 in\n")
+		fdg.WriteString("pullup 6\n")
+		fdg.WriteString("function 13 in\n")
+		fdg.WriteString("pullup 13\n")
+		fdg.WriteString("function 19 in\n")
+		fdg.WriteString("pullup 19\n")
+		fdg.WriteString("function 20 in\n")
+		fdg.WriteString("pullup 20\n")
+		fdg.WriteString("function 21 in\n")
+		fdg.WriteString("pullup 21\n")
+		fdg.WriteString("function 26 in\n")
+		fdg.WriteString("pullup 26\n")
+		buf = make([]byte, 16)
+	} else if runtime.GOOS == "linux" {
+		host = 2
+		fd5, err = os.Open("/sys/class/gpio/gpio5/value")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fd6, _ = os.Open("/sys/class/gpio/gpio6/value")
+		fd13, _ = os.Open("/sys/class/gpio/gpio13/value")
+		fd19, _ = os.Open("/sys/class/gpio/gpio19/value")
+		fd26, _ = os.Open("/sys/class/gpio/gpio26/value")
+		fd21, _ = os.Open("/sys/class/gpio/gpio21/value")
+		fd20, _ = os.Open("/sys/class/gpio/gpio20/value")
+		buf = make([]byte, 1)
+	} else {
+		fmt.Printf("No control box support for %s\n", runtime.GOOS)
+	}
 
 	curstate := 0
 	filterset := 0
@@ -463,36 +513,66 @@ func ctlstation() {
 	for {
 		time.Sleep(10 * time.Millisecond)
 		newstate := 0
-		n, err := fd5.ReadAt(buf, 0)
-		if n != 1 {
-			fmt.Println(err)
-		}
-		if buf[0] == '0' {
-			newstate |= 0x02
-		}
-		fd6.ReadAt(buf, 0)
-		if buf[0] == '0' {
-			newstate |= 0x01
-		}
-		fd13.ReadAt(buf, 0)
-		if buf[0] == '0' {
-			newstate |= 0x40
-		}
-		fd19.ReadAt(buf, 0)
-		if buf[0] == '0' {
-			newstate |= 0x20
-		}
-		fd26.ReadAt(buf, 0)
-		if buf[0] == '0' {
-			newstate |= 0x10
-		}
-		fd21.ReadAt(buf, 0)
-		if buf[0] == '0' {
-			newstate |= 0x04
-		}
-		fd20.ReadAt(buf, 0)
-		if buf[0] == '0' {
-			newstate |= 0x08
+		if host == 1 {
+			n, err := fdg.ReadAt(buf, 0)
+			if n != 16 {
+				fmt.Print(err)
+			}
+			s := string(buf)
+			x, _ := strconv.ParseUint(s, 16, 64)
+			if x & (1 << 6) == 0 {
+				newstate |= 0x01;
+			}
+			if x & (1 << 5) == 0 {
+				newstate |= 0x02;
+			}
+			if x & (1 << 21) == 0 {
+				newstate |= 0x04;
+			}
+			if x & (1 << 20) == 0 {
+				newstate |= 0x08;
+			}
+			if x & (1 << 26) == 0 {
+				newstate |= 0x10;
+			}
+			if x & (1 << 19) == 0 {
+				newstate |= 0x20;
+			}
+			if x & (1 << 13) == 0 {
+				newstate |= 0x40;
+			}
+		} else if host == 2 {
+			n, err := fd5.ReadAt(buf, 0)
+			if n != 1 {
+				fmt.Println(err)
+			}
+			if buf[0] == '0' {
+				newstate |= 0x02
+			}
+			fd6.ReadAt(buf, 0)
+			if buf[0] == '0' {
+				newstate |= 0x01
+			}
+			fd13.ReadAt(buf, 0)
+			if buf[0] == '0' {
+				newstate |= 0x40
+			}
+			fd19.ReadAt(buf, 0)
+			if buf[0] == '0' {
+				newstate |= 0x20
+			}
+			fd26.ReadAt(buf, 0)
+			if buf[0] == '0' {
+				newstate |= 0x10
+			}
+			fd21.ReadAt(buf, 0)
+			if buf[0] == '0' {
+				newstate |= 0x04
+			}
+			fd20.ReadAt(buf, 0)
+			if buf[0] == '0' {
+				newstate |= 0x08
+			}
 		}
 		if newstate != filterset || newstate&0x70 == 0 {
 			filtercnt = 0
@@ -543,15 +623,20 @@ func main() {
 	demomode = flag.Bool("D", false, "automatically cycle among perspectives")
 	nogui := flag.Bool("g", false, "run without GUI")
 	tkkludge = flag.Bool("K", false, "work around wish memory leaks")
+	useled := flag.Bool("L", false, "use an external LED matrix driver")
 	wp := flag.Int("w", 0, "`width` of the simulation window in pixels")
 	flag.Parse()
 	width = *wp
+	guistate.proc = nil
 	if !*nogui {
 		go gui()
 		ppunch = make(chan string)
 	}
 	if *usecontrol {
 		go ctlstation()
+	}
+	if *useled {
+		go leddisplay()
 	}
 
 	initbut = make(chan int)
