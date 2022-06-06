@@ -467,6 +467,9 @@ func doccg(u *accumulator, unit int, resp chan int) {
 		for i := 0; i < 10; i++ {
 			u.val[i] = byte(0)
 		}
+		if u.sigfig < 10 {
+			u.val[9-u.sigfig] = 5
+		}
 		u.sign = false
 	}
 }
