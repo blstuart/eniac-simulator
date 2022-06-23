@@ -308,7 +308,7 @@ func innergui() {
 	guistate.guimode = 0
 	guistate.upd = make(chan int, 2)
 	lastcmode := -1
-	widset := []int{480, 720, 1020, 1280, 1360, 1600, 1800, 1900}
+	widset := []int{480, 720, 1020, 1280, 1360, 1600, 1800, 1900, 2500, 3500}
 	cmd := exec.Command("wish")
 	gpipe, _ := cmd.StdinPipe()
 	cpipe, _ := cmd.StdoutPipe()
@@ -1020,7 +1020,8 @@ func ray(xprime, yprime, offset int) (x, y int, vis bool) {
 	switch {
 	case guistate.guimode == 0:
 		vis = true
-		f := 1000
+//		f := 1000
+		f := (80 * width) / 100
 		x1 := 2568
 		z0 := (x1 * f * 2) / width
 
