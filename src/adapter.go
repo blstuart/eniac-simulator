@@ -2,6 +2,8 @@ package main
 
 var dpin [40]chan pulse
 var dpout [40][11]chan pulse
+var pdin [40][11] chan pulse
+var pdout [40]chan pulse
 var shiftin [40]chan pulse
 var shiftout [40]chan pulse
 var delin [40]chan pulse
@@ -12,8 +14,10 @@ var sdout [40]chan pulse
 func adreset() {
 	for i := 0; i < 40; i++ {
 		dpin[i] = nil
+		pdout[i] = nil
 		for j := 0; j < 11; j++ {
 			dpout[i][j] = nil
+			pdin[i][j] = nil
 		}
 		shiftin[i] = nil
 		shiftout[i] = nil
@@ -32,6 +36,13 @@ func adplug(ilk string, inout, which, param int, ch chan pulse) {
 			go digitprog(dpin[which], which)
 		} else {
 			dpout[which][param-1] = ch
+		}
+	case "pd":
+		if inout == 0 {
+			pdin[which][param-1] = ch
+		} else {
+			pdout[which] = ch
+			go progdigit(which)
 		}
 	case "s":
 		if inout == 0 {
@@ -75,6 +86,48 @@ func digitprog(in chan pulse, which int) {
 		}
 		if d.resp != nil {
 			d.resp <- 1
+		}
+	}
+}
+
+func dopdpulse(which, d int, resp1, resp2 chan int) {
+	if d != 0 && pdout[which] != nil {
+		pdout[which] <- pulse{d, resp1}
+		<- resp1
+	}
+	if resp2 != nil {
+		resp2 <- 1
+	}
+}
+
+func progdigit(which int) {
+	var p pulse
+
+	resp := make(chan int)
+	for {
+		select {
+		case p = <- pdin[which][0]:
+			dopdpulse(which, p.val, resp, p.resp)
+		case p = <- pdin[which][1]:
+			dopdpulse(which, p.val << 1, resp, p.resp)
+		case p = <- pdin[which][2]:
+			dopdpulse(which, p.val << 2, resp, p.resp)
+		case p = <- pdin[which][3]:
+			dopdpulse(which, p.val << 3, resp, p.resp)
+		case p = <- pdin[which][4]:
+			dopdpulse(which, p.val << 4, resp, p.resp)
+		case p = <- pdin[which][5]:
+			dopdpulse(which, p.val << 5, resp, p.resp)
+		case p = <- pdin[which][6]:
+			dopdpulse(which, p.val << 6, resp, p.resp)
+		case p = <- pdin[which][7]:
+			dopdpulse(which, p.val << 7, resp, p.resp)
+		case p = <- pdin[which][8]:
+			dopdpulse(which, p.val << 8, resp, p.resp)
+		case p = <- pdin[which][9]:
+			dopdpulse(which, p.val << 9, resp, p.resp)
+		case p = <- pdin[which][10]:
+			dopdpulse(which, p.val << 10, resp, p.resp)
 		}
 	}
 }

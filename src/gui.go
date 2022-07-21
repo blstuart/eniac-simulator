@@ -1020,7 +1020,6 @@ func ray(xprime, yprime, offset int) (x, y int, vis bool) {
 	switch {
 	case guistate.guimode == 0:
 		vis = true
-//		f := 1000
 		f := (80 * width) / 100
 		x1 := 2568
 		z0 := (x1 * f * 2) / width
