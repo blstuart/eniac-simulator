@@ -34,6 +34,24 @@ func b2is(b bool) string {
 	return "0"
 }
 
+func cmdref() {
+	fmt.Println("Commands:\n" +
+				"b: Press a button (c, i, r)\n" +
+				"d: Display a unit status\n" +
+				"D: Display all unit statuses\n" +
+				"f: Associate a file with the punch or reader\n"+
+				"l: Load a configuration file\n" +
+				"h: Display the command reference\n" +
+				"p: Plug in a jumper\n" +
+				"q: Quit\n" +
+				"r: Reset a single unit\n" +
+				"R: Reset all units\n" +
+				"s: Set a switch setting\n" +
+				"u: Declare units being used\n" +
+				"dt: Declare the number of data trunks in use\n" +
+				"pt: Declare the number of program trunks in use")
+}
+
 func fanout(in chan pulse, out []chan pulse) {
 	var q pulse
 
@@ -148,6 +166,8 @@ func proccmd(cmd string) int {
 			}
 			punchwriter = bufio.NewWriter(fp)
 		}
+	case "h", "?":
+		cmdref()
 	case "l":
 		if len(f) != 2 {
 			fmt.Println("Load syntax: l file")
