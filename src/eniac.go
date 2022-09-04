@@ -5,9 +5,11 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
 	"runtime"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 	"unicode"
 )
@@ -32,24 +34,6 @@ func b2is(b bool) string {
 		return "1"
 	}
 	return "0"
-}
-
-func cmdref() {
-	fmt.Println("Commands:\n" +
-				"b: Press a button (c, i, r)\n" +
-				"d: Display a unit status\n" +
-				"D: Display all unit statuses\n" +
-				"f: Associate a file with the punch or reader\n"+
-				"l: Load a configuration file\n" +
-				"h: Display the command reference\n" +
-				"p: Plug in a jumper\n" +
-				"q: Quit\n" +
-				"r: Reset a single unit\n" +
-				"R: Reset all units\n" +
-				"s: Set a switch setting\n" +
-				"u: Declare units being used\n" +
-				"dt: Declare the number of data trunks in use\n" +
-				"pt: Declare the number of program trunks in use")
 }
 
 func fanout(in chan pulse, out []chan pulse) {
@@ -132,19 +116,21 @@ func proccmd(cmd string) int {
 			fmt.Println(mpstat())
 		}
 	case "D":
-		fmt.Println(initstat())
-		fmt.Println(mpstat())
+		fmt.Println("init:", initstat())
+		fmt.Println("mp:", mpstat())
+		fmt.Println("acc:")
 		for i := 0; i < 20; i += 2 {
 			fmt.Print(accstat(i))
 			fmt.Print("   ")
 			fmt.Println(accstat(i + 1))
 		}
-		fmt.Println(divsrstat2())
-		fmt.Println(multstat())
+		fmt.Println("div:", divsrstat2())
+		fmt.Println("mul:", multstat())
+		fmt.Println("ft:")
 		for i := 0; i < 3; i++ {
 			fmt.Println(ftstat(i))
 		}
-		fmt.Println(consstat())
+		fmt.Println("ct:", consstat())
 	case "f":
 		if len(f) != 3 {
 			fmt.Println("file syntax: f (r|p) filename")
@@ -167,7 +153,23 @@ func proccmd(cmd string) int {
 			punchwriter = bufio.NewWriter(fp)
 		}
 	case "h", "?":
-		cmdref()
+		if (len(f)) == 1 {
+			fmt.Println("h cmd   : Display command reference\n" +
+						"h units : List units\n"+
+						"h man (unit) : Display help for (unit)")
+			break
+		}
+		switch f[1] {
+			case "cmd" : cmdref() 
+			case "units" : unitsref()
+			case "man" :
+				if (len(f) == 3) {
+					man(f[2])
+				} else { 
+					fmt.Println("Missing unit")
+				}
+		}
+
 	case "l":
 		if len(f) != 2 {
 			fmt.Println("Load syntax: l file")
@@ -714,10 +716,20 @@ func main() {
 		time.Sleep(100 * time.Millisecond)
 		proccmd("l " + flag.Arg(0))
 	}
+  	sigs := make(chan os.Signal, 1)
+  	signal.Notify(sigs, syscall.SIGINT)
 
 	sc := bufio.NewScanner(os.Stdin)
 	fmt.Print("> ")
 	for sc.Scan() {
+		go func() {
+			s := <- sigs
+	        if ( s == os.Interrupt){
+	        	// Switch to 1 pulse mode on SIGINT
+		        cycsw <- [2]string{"op", "1a"}
+		        fmt.Print("> ")
+	        }
+    	}()
 		if proccmd(sc.Text()) < 0 {
 			break
 		}
