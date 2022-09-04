@@ -16,5 +16,7 @@ echo Linux/i386
 GOOS=linux GOARCH=386 go build -o eniac.linux_i386
 echo MacOS/amd64
 GOOS=darwin GOARCH=amd64 go build -o eniac.macos_amd64
+echo MacOS/arm64
+GOOS=darwin GOARCH=arm64 go build -o eniac.macos_arm64
 echo Windows/amd64
 GOOS=windows GOARCH=amd64 go build -o eniac.exe
