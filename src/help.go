@@ -2,6 +2,7 @@ package main
 
 import (
     "fmt"
+    "runtime"
 )
 
 var unit string
@@ -32,20 +33,22 @@ func cmdref() {
                 "s: Set a switch setting\n" +
                 "u: Declare units being used\n" +
                 "dt: Declare the number of data trunks in use\n" +
-                "pt: Declare the number of program trunks in use\n" +
-                "^C: Switch cycling unit to 1 pulse mode (pause execution)")
+                "pt: Declare the number of program trunks in use")
+    if runtime.GOOS != "windows" {
+                fmt.Println("^C: Switch cycling unit to 1 pulse mode (pause execution)")
+    }
 }
 func unitsref() {
-    fmt.Println("init: Initialization unit\n" +
-                "cy: Cycling unit\n" +
-                "ct: Constant transmitter\n" +
-                "pr: Printer\n"+
-                "acc: Accumulator\n" +
-                "mul: High Speed Multiplier\n" +
-                "div: Divider and Square Rooter\n" +
-                "ft: Function Tables\n" +
-                "mp: Master Programmer\n" +
-                "a: Adapters")
+    fmt.Println("init\t Initialization unit\n" +
+                "cy\t Cycling unit\n" +
+                "ct\t Constant transmitter\n" +
+                "pr\t Printer\n"+
+                "acc\t Accumulator\n" +
+                "mul\t High Speed Multiplier\n" +
+                "div\t Divider and Square Rooter\n" +
+                "ft\t Function Tables\n" +
+                "mp\t Master Programmer\n" +
+                "a\t Adapters")
 }
 
 func man(unit string){
@@ -271,5 +274,7 @@ TYPES
         case "ft": fmt.Println(ftman)
         case "mp": fmt.Println(mpman)
         case "a": fmt.Println(aman)
+        default: fmt.Println("Syntax: h man [init, cy, ct, pr, acc, mul, div,"+
+                             "ft, mp, a]")
     }
 }
