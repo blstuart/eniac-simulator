@@ -134,6 +134,7 @@ func initiateunit(cyctrunk chan pulse, button chan int) {
 					if punchwriter != nil {
 						punchwriter.WriteString(s)
 						punchwriter.WriteByte('\n')
+						punchwriter.Flush()
 					} else {
 						fmt.Println(s)
 					}

@@ -385,7 +385,7 @@ s a6.cc12 C
 s a6.rp12 1
 s a7.op1 β
 s a7.op2 γ
-s a7.cc1 C
+s a7.cc2 C
 s a7.op5 α
 s a7.cc5 C
 s a7.op6 S

@@ -48,9 +48,10 @@ s p.a8 G
 s p.a4 H
 p 1-1 p.Ai
 p 1-11 p.Adi
-p p.A1o 1-6
+#p p.A1o 1-6
+p p.A1o 1-4
 p p.A2o 1-3
-p p.A3o 1-4
+#p p.A3o 1-4
 p 1-3 p.Bi
 p p.B1o 2-1
 p p.B2o 2-6
@@ -442,7 +443,7 @@ s a6.op2 α
 s a6.cc2 0
 p 4-1 c.14i			# c.14: 4-1 Flr 1-11
 s c.s14 Flr
-p c.14o 1-11
+#p c.14o 1-11
 p 5-1 a4.3i			# a4.3: 5-1 A(2)0   - Compute x'^2+y'^2 to look up the
 s a4.op3 A			# drag coefficient from a table
 s a4.cc3 0
@@ -703,8 +704,10 @@ p a6.7o 1-4
 
 p a20.S ad.dp.1.11		# Test y and continue if non-negative
 p ad.dp.1.11 5-11
+p a20.A ad.dp.2.11
+p ad.dp.2.11 6-11
 p 5-10 a20.12i
-s a20.op12 S
+s a20.op12 AS
 s a20.cc12 0
 s a20.rp12 1
 p 5-10 a15.4i
@@ -715,6 +718,11 @@ s a19.op5 0
 s a19.cc5 0
 s a19.rp5 1
 p a19.5o 1-4
+p 6-11 a19.6i
+s s19.op6 0
+s a19.cc6 0
+s a19.rp6 1
+p a19.6o 3-10
 
 #
 # Full multiplier configuration for 20-digit
@@ -825,3 +833,9 @@ s a13.op8 AS
 s a13.cc8 C
 s a13.rp8 1
 
+p i.Io 3-10
+p c.14o 1-4
+
+b c
+b r
+b i

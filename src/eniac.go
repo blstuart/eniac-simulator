@@ -26,6 +26,7 @@ var width, height int
 var cardscanner *bufio.Scanner
 var punchwriter *bufio.Writer
 var demomode, tkkludge, usecontrol *bool
+var engcmd *string
 
 func b2is(b bool) string {
 	if b {
@@ -509,7 +510,7 @@ func ctlstation() {
 	filterset := 0
 	filtercnt := 0
 	// Seriously ugly hack to give other goprocs time to get initialized
-	time.Sleep(100 * time.Millisecond)
+	time.Sleep(500 * time.Millisecond)
 	for {
 		time.Sleep(10 * time.Millisecond)
 		newstate := 0
@@ -621,9 +622,11 @@ func main() {
 	}
 	usecontrol = flag.Bool("c", false, "use a portable control station connected to GPIO pins")
 	demomode = flag.Bool("D", false, "automatically cycle among perspectives")
+	engcmd = flag.String("E", "", "use external program for display")
 	nogui := flag.Bool("g", false, "run without GUI")
 	tkkludge = flag.Bool("K", false, "work around wish memory leaks")
 	useled := flag.Bool("L", false, "use an external LED matrix driver")
+	useled2 := flag.Bool("LL", false, "use an extern LED with kernel driver")
 	wp := flag.Int("w", 0, "`width` of the simulation window in pixels")
 	flag.Parse()
 	width = *wp
@@ -635,8 +638,15 @@ func main() {
 	if *usecontrol {
 		go ctlstation()
 	}
+	if *engcmd != "" {
+		// enginedisplay starts its own goroutine
+		enginedisplay(engcmd)
+	}
 	if *useled {
-		go leddisplay()
+		go leddisplay(1)
+	}
+	if *useled2 {
+		go leddisplay(2)
 	}
 
 	initbut = make(chan int)
@@ -691,7 +701,7 @@ func main() {
 
 	if flag.NArg() >= 1 {
 		// Seriously ugly hack to give other goprocs time to get initialized
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(1000 * time.Millisecond)
 		proccmd("l " + flag.Arg(0))
 	}
 

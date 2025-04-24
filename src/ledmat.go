@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"time"
@@ -10,13 +11,18 @@ import (
 var ledacc = []int{ 1, 2, 3, 4 }
 var ledproc *os.Process
 
-func leddisplay() {
+func leddisplay(mode int) {
 	var astat [4]string
+	var matpipe io.Writer
 
-	cmd := exec.Command("ledmat")
-	matpipe, _ := cmd.StdinPipe()
-	cmd.Start()
-	ledproc = cmd.Process
+	if(mode == 1) {
+		cmd := exec.Command("ledmat")
+		matpipe, _ = cmd.StdinPipe()
+		cmd.Start()
+		ledproc = cmd.Process
+	} else {
+		matpipe, _ = os.OpenFile("#L/ledmat", os.O_RDWR, 0)
+	}
 	fmt.Fprintf(matpipe, "c\n")
 	for i := 0; i < 4; i++ {
 		fmt.Fprintf(matpipe, "s %d 10 1\n", i*16+2)
@@ -56,6 +62,6 @@ func leddisplay() {
 			}
 			astat[i] = s
 		}
-		time.Sleep(30 * time.Millisecond)
+		time.Sleep(2 * time.Millisecond)
 	}
 }
