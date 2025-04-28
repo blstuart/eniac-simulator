@@ -1,0 +1,109 @@
+newmtl floor
+Kd 0.4 0.4 0.4
+Ka 0.6 0.6 0.6
+illum 0
+map_Kd vr/floortile.jpg
+
+newmtl initctl
+map_Kd vr/initctl.png
+
+newmtl inittop
+map_Kd vr/inittop.png
+
+newmtl cycctl
+map_Kd vr/cycctl.png
+
+newmtl cyctop
+map_Kd vr/cyctop.png
+
+newmtl mpctl
+map_Kd vr/mpctl.png
+
+newmtl mptop
+map_Kd vr/mptop.png
+
+newmtl accctl
+map_Kd vr/accctl.png
+
+newmtl acctop
+map_Kd vr/acctop.png
+
+newmtl ft1ctl
+map_Kd vr/ft1ctl.png
+
+newmtl ft1top
+map_Kd vr/ft1top.png
+
+newmtl ft2ctl
+map_Kd vr/ft2ctl.png
+
+newmtl ft2top
+map_Kd vr/ft2top.png
+
+newmtl divctl
+map_Kd vr/divctl.png
+
+newmtl divtop
+map_Kd vr/divtop.png
+
+newmtl mulctl
+map_Kd vr/mulctl.png
+
+newmtl mul1top
+map_Kd vr/mul1top.png
+
+newmtl mul2top
+map_Kd vr/mul2top.png
+
+newmtl mul3top
+map_Kd vr/mul3top.png
+
+newmtl ct1ctl
+map_Kd vr/ct1ctl.png
+
+newmtl ct1top
+map_Kd vr/ct1top.png
+
+newmtl ct2ctl
+map_Kd vr/ct2ctl.png
+
+newmtl ct2top
+map.Kd ct2top.png
+
+newmtl ct3ctl
+map_Kd vr/ct3ctl.png
+
+newmtl ct3top
+map_Kd vr/ct3top.png
+
+newmtl pr1ctl
+map_Kd vr/pr1ctl.png
+
+newmtl pr2ctl
+map_Kd vr/pr2ctl.png
+
+newmtl pr3ctl
+map_Kd vr/pr3ctl.png
+
+newmtl prtop
+map_Kd vr/prtop.png
+
+newmtl swpan
+map_Kd vr/swpan.png
+
+newmtl ptray
+map_Kd vr/ptray.png
+
+newmtl dtray
+map_Kd vr/dtray.png
+
+newmtl gray2
+Ka 0.1 0.1 0.1
+Kd 0.08 0.08 0.08
+illum 1
+
+newmtl black
+Kd 0.0 0.0 0.0
+Ka 0.0 0.0 0.0
+Ks 0.7 0.7 0.7
+illum 2

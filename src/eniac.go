@@ -18,14 +18,12 @@ type pulse struct {
 }
 
 var initbut, cycbut chan int
-var ppunch chan string
 var mpsw, conssw, cycsw, multsw, divsw, prsw chan [2]string
 var accsw [20]chan [2]string
 var ftsw [3]chan [2]string
-var width, height int
 var cardscanner *bufio.Scanner
 var punchwriter *bufio.Writer
-var demomode, tkkludge, usecontrol *bool
+var usecontrol *bool
 var engcmd *string
 
 func b2is(b bool) string {
@@ -328,8 +326,8 @@ func proccmd(cmd string) int {
 			fmt.Println("Invalid jack spec: ", p2)
 		}
 	case "q":
-		if guistate.proc != nil {
-			guistate.proc.Kill()
+		if engineproc != nil {
+			engineshutdown()
 		}
 		if ledproc != nil {
 			ledproc.Kill()
@@ -621,20 +619,10 @@ func main() {
 		flag.PrintDefaults()
 	}
 	usecontrol = flag.Bool("c", false, "use a portable control station connected to GPIO pins")
-	demomode = flag.Bool("D", false, "automatically cycle among perspectives")
-	engcmd = flag.String("E", "", "use external program for display")
-	nogui := flag.Bool("g", false, "run without GUI")
-	tkkludge = flag.Bool("K", false, "work around wish memory leaks")
+	engcmd = flag.String("v", "", "use visualization program for display")
 	useled := flag.Bool("L", false, "use an external LED matrix driver")
 	useled2 := flag.Bool("LL", false, "use an extern LED with kernel driver")
-	wp := flag.Int("w", 0, "`width` of the simulation window in pixels")
 	flag.Parse()
-	width = *wp
-	guistate.proc = nil
-	if !*nogui {
-		go gui()
-		ppunch = make(chan string)
-	}
 	if *usecontrol {
 		go ctlstation()
 	}
