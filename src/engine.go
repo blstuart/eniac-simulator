@@ -46,7 +46,13 @@ func enginedisplay(engcmd *string) {
 	var engmsg string
 
 	cmlast := -1
-	cmd := exec.Command(*engcmd)
+	argv := strings.Split(*engcmd, " ")
+	cmd := exec.Command(argv[0])
+	if cmd.Err != nil {
+		fmt.Fprintf(os.Stderr, "visualizion: %s\n", cmd.Err.Error())
+		os.Exit(1)
+	}
+	cmd.Args = argv
 	engout, _ = cmd.StdinPipe()
 	engin, _ := cmd.StdoutPipe()
 	cmd.Stderr = os.Stderr
