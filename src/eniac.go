@@ -5,9 +5,11 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
 	"runtime"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 	"unicode"
 )
@@ -88,6 +90,7 @@ func proccmd(cmd string) int {
 			cycbut <- 1
 		case "r":
 			initbut <- 3
+		default: fmt.Println("Valid buttons: c, i, p, r")
 		}
 	case "d":
 		if len(f) != 2 {
@@ -95,37 +98,47 @@ func proccmd(cmd string) int {
 			break
 		}
 		switch f[1][0] {
-		case 'a':
-			unit, _ := strconv.Atoi(f[1][1:])
-			fmt.Println(accstat(unit - 1))
-		case 'c':
-			fmt.Println(consstat())
-		case 'd':
-			fmt.Println(divsrstat2())
-		case 'f':
-			unit, _ := strconv.Atoi(f[1][1:])
-			fmt.Println(ftstat(unit - 1))
-		case 'i':
-			fmt.Println(initstat())
-		case 'm':
-			fmt.Println(multstat())
-		case 'p':
-			fmt.Println(mpstat())
+			case 'a':
+				unit, err := strconv.Atoi(f[1][1:]);
+				if err == nil && unit > 0 && unit <= 20 { 
+						fmt.Println(accstat(unit - 1))					
+				} else {
+						fmt.Println("Syntax: d a[n] with 1≤n≤20")
+			    }
+			case 'c':
+				fmt.Println(consstat())
+			case 'd':
+				fmt.Println(divsrstat2())
+			case 'f':
+				unit, err := strconv.Atoi(f[1][1:]);
+				if err == nil && unit > 0 && unit <= 3 { 
+					fmt.Println("Syntax: d f[n] with 1≤n≤3")
+				} else {
+						fmt.Println(ftstat(unit - 1))
+			    }
+			case 'i':
+				fmt.Println(initstat())
+			case 'm':
+				fmt.Println(multstat())
+			case 'p':
+				fmt.Println(mpstat())
+			default:
+				fmt.Println("Available units: a(cc)[n], c(ycle), d(iv), f(t)[n],"+
+							" i(nit), m(ul), (m)p. Ex: d f3")
 		}
 	case "D":
-		fmt.Println(initstat())
-		fmt.Println(mpstat())
+		fmt.Println("init:", initstat())
+		fmt.Println("mp: ", mpstat())
 		for i := 0; i < 20; i += 2 {
-			fmt.Print(accstat(i))
-			fmt.Print("   ")
-			fmt.Println(accstat(i + 1))
+			fmt.Printf("a%02d: %s  ", i + 1, accstat(i))
+			fmt.Printf("a%02d: %s\n", i + 2 , accstat(i + 1))
 		}
-		fmt.Println(divsrstat2())
-		fmt.Println(multstat())
+		fmt.Println("div:", divsrstat2())
+		fmt.Println("mul:", multstat())
 		for i := 0; i < 3; i++ {
-			fmt.Println(ftstat(i))
+			fmt.Printf("ft%d: %s\n", i + 1, ftstat(i))
 		}
-		fmt.Println(consstat())
+		fmt.Println("ct: ", consstat())
 	case "f":
 		if len(f) != 3 {
 			fmt.Println("file syntax: f (r|p) filename")
@@ -146,6 +159,24 @@ func proccmd(cmd string) int {
 				break
 			}
 			punchwriter = bufio.NewWriter(fp)
+		default : fmt.Println("file syntax: f (r|p) filename")
+		}
+	case "h", "?", "help":
+		if (len(f)) == 1 {
+			fmt.Println("h cmd   : Display command reference\n" +
+						"h units : List units\n"+
+						"h man unit : Detailed help for unit")
+			break
+		}
+		switch f[1] {
+			case "cmd" : cmdref() 
+			case "units" : unitsref()
+			case "man" :
+				if (len(f) == 3) {
+					man(f[2])
+				} else { 
+					fmt.Println("Missing unit")
+				}
 		}
 	case "l":
 		if len(f) != 2 {
@@ -364,6 +395,9 @@ func proccmd(cmd string) int {
 			multreset()
 		case "p":
 			mpreset()
+		default:
+			fmt.Println("Available units: a(cc)[n], c(ycle), d(iv), f(t)[n],"+
+						" i(nit), m(ul), (m)p. Ex: r f3")
 		}
 	case "R":
 		initreset()
@@ -439,13 +473,13 @@ func proccmd(cmd string) int {
 				prsw <- [2]string{p[1], f[2]}
 			}
 		default:
-			fmt.Printf("unknown unit for switch: %s\n", p[0])
+			fmt.Printf("Unknown unit for switch: %s\n", p[0])
 		}
 	case "u":
 	case "dt":
 	case "pt":
 	default:
-		fmt.Printf("Unknown command: %s\n", cmd)
+		fmt.Printf("Unknown command: %s. Type \"h\" for help.\n", cmd)
 	}
 	return 0
 }
@@ -692,10 +726,21 @@ func main() {
 		time.Sleep(1000 * time.Millisecond)
 		proccmd("l " + flag.Arg(0))
 	}
+  	sigs := make(chan os.Signal, 1)
+  	signal.Notify(sigs, syscall.SIGINT)
 
 	sc := bufio.NewScanner(os.Stdin)
 	fmt.Print("> ")
 	for sc.Scan() {
+		go func() {
+			s := <- sigs
+	        if ( s == os.Interrupt){
+	        	// Switch to 1 pulse mode on SIGINT
+		        cycsw <- [2]string{"op", "1a"}
+		        fmt.Printf("\rCycling unit set to single step mode.\n"+
+		        		   "To leave the simulator, type 'q'.\n> ")
+	        }
+    	}()
 		if proccmd(sc.Text()) < 0 {
 			break
 		}
