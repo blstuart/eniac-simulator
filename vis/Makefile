@@ -1,5 +1,8 @@
 C++_FLAGS=-I/usr/pkg/include/irrlicht -L/usr/pkg/lib
 
+ansi: ansi.go
+	go build -o ansi ansi.go
+
 eniac3d: eniac3d.o
 	g++ $(C++_FLAGS) -o eniac3d eniac3d.o -lIrrlicht
 

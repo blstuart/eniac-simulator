@@ -102,6 +102,8 @@ func accreset(unit int) {
 	u.γ = nil
 	u.δ = nil
 	u.ε = nil
+	u.A = nil
+	u.S = nil
 	for i := 0; i < 12; i++ {
 		u.ctlterm[i] = nil
 		u.inff1[i] = false

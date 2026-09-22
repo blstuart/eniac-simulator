@@ -842,7 +842,7 @@ mainloop:
 			neonplcl(gpipe, fmt.Sprintf(".ft%daset", unit+1), val == 1, 107+ftuoff[unit]*642, -25)
 
 		// Constant Transmitter
-		case "c":
+		case "ct":
 			prog, _ := strconv.Atoi(p[1])
 			ff, _ := strconv.Atoi(p[2])
 			row := prog / 10

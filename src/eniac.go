@@ -362,8 +362,10 @@ func proccmd(cmd string) int {
 			mpreset()
 		}
 	case "R":
+		cycsw <- [2]string{"op", "1a"}
+		time.Sleep(100 * time.Millisecond)
+		trayreset()
 		initreset()
-		cycreset()
 		mpreset()
 		ftreset(0)
 		ftreset(1)
@@ -376,7 +378,8 @@ func proccmd(cmd string) int {
 		consreset()
 		prreset()
 		adreset()
-		trayreset()
+		cycreset()
+		//cycsw <- [2]string{"op", "co"}
 	case "s":
 		if len(f) < 3 {
 			fmt.Println("No switch setting")

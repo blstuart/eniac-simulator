@@ -606,14 +606,14 @@ main() {
 
 	while(device->run()) {
 		driver->beginScene(true, true, SColor(255, 105, 110, 130));
-		smgr->setActiveCamera(camera1);
+		smgr->setActiveCamera(camera2);
 		driver->setViewPort(rect<s32>(20, -200, 820, 1050));
 		smgr->drawAll();
 		menu->setRelativePosition(rect<s32>(100, 50, 430, 50 + 30 * nmenu));
 		clocklist->setRelativePosition(rect<s32>(100, 50, 400, 140));
 		cards->setRelativePosition(rect<s32>(820, 900, 1650, 1050));
 		guienv->drawAll();
-		smgr->setActiveCamera(camera2);
+		smgr->setActiveCamera(camera1);
 		driver->setViewPort(rect<s32>(860, -200, 1660, 1050));
 		smgr->drawAll();
 		menu->setRelativePosition(rect<s32>(115, 50, 445, 50 + 30 * nmenu));

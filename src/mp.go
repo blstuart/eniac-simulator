@@ -49,6 +49,7 @@ func mpstat() string {
 func mpreset() {
 	for i := 0; i < 20; i++ {
 		dec[i].di = nil
+		dec[i].carry = false
 		for j := 0; j < 6; j++ {
 			dec[i].lim[j] = 0
 		}

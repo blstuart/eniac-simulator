@@ -63,7 +63,7 @@ var table1 [10][10]pulseset = [10][10]pulseset{{},
 }
 
 func multstat() string {
-	s := fmt.Sprintf("%d ", stage)
+	s := fmt.Sprintf("%2d ", stage)
 	for i, _ := range multff {
 		if multff[i] {
 			s += "1"

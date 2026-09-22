@@ -71,6 +71,7 @@ func enginedisplay(engcmd *string) {
 	} ()
 
 	cyclast := 0
+	initlast := "000000000000000"
 	for i := 0; i < 20; i++ {
 		astat[i] = "P 0000000000 0000000000 0 000000000000"
 	}
@@ -198,6 +199,12 @@ func enginedisplay(engcmd *string) {
 				case Cont:
 					fmt.Fprintf(engout, "cm C\n")
 				}
+				needupd = true
+			}
+			s = initstat()
+			if s != initlast {
+				initlast = s
+				fmt.Fprintf(engout, "init %s\n", s)
 				needupd = true
 			}
 			s = mpstat()
