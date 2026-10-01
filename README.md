@@ -85,7 +85,7 @@ This one works with the AR system from
 and the Tilt Five native SDK.
 It is built with the command `make eniact5`.
 
-6. `ledmat`: a driver for an LED matrix connected to a Raspberrhy Pi running
+6. `ledmat`: a driver for an LED matrix connected to a Raspberry Pi running
 Plan 9.
 Some discussion and a brief demonstration of this was presented at the
 [11th International Workshop on Plan 9](http://iwp9.org).
