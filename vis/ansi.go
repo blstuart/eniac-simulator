@@ -23,6 +23,8 @@ func main() {
 
 func reset() {
 	fmt.Fprint(os.Stderr, "\x1bc")
+	fmt.Fprint(os.Stderr, "\x1b[20l")
+	fmt.Fprint(os.Stderr, "\x1b[0;24r")
 }
 
 func cls() {
@@ -75,6 +77,7 @@ func procupd() {
 	for {
 		if !msgin.Scan() {
 			reset()
+			cls()
 			os.Exit(0)
 		}
 		s := msgin.Text()
@@ -82,6 +85,7 @@ func procupd() {
 		switch p[0] {
 		case "exit":
 			reset()
+			cls()
 			return
 		case "up":
 			fmt.Println("update")
