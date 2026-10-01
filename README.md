@@ -48,43 +48,49 @@ In the simulator you do this with the `b i` command.
 Doing so will cause the ENIAC to puch a series of cards, each holding a prime
 number in the range of 3 to 2801.
 
-### Building Graphical Support
+### Building Visualization Support
 
-At the present time, there are five different graphical support programs.
+At the present time, there are six different graphical support programs.
 Which one(s) will be useful to you depends on the details of your environment.
 They are as follows:
 
-1. `eniactk`: the original graphical interface.
+1. `ansi`: a classic simulator interface on a VT-100 terminal.
+It's written in Go and requires no special support.
+The screen is split into two regions: one where the state of all the units
+in the machine are displayed, and one where the user can type commands.
+The display continuously updates as the state changes.
+
+2. `eniactk`: the original graphical interface.
 It requires that you have TCL/Tk installed on your system and that the program `wish`
 be in your path.
 It uses the graphics in the images directory.
 As it is written in Go, you can compile it with the command `go build -o eniactk eniactk.go`
 or if you have `make` on your system, you can `make eniactk`.
 
-2. `eniacfp`: provides a first-person video game type of interface.
+3. `eniacfp`: provides a first-person video game type of interface.
 It uses the 3d model in the `obj` directory.
 To use this, you must have the Irrlicht library and a C++ compiler installed.
 It is built with the command `make eniacfp`.
 
-3. `eniac3d`: very similar to `eniacfp` except that it renders the view from both
+4. `eniac3d`: very similar to `eniacfp` except that it renders the view from both
 eyes and presents them both.
 It's only useful if you have a video display system that supports 3d display.
 These displays usually require the use of LCD shutter glasses that alternate
 which eye is open, and the display switches between which frame is displayed.
 The command `make eniac3d` builds this one.
 
-4. `eniact5`: another 3d experience.
+5. `eniact5`: another 3d experience.
 This one works with the AR system from
 [Tilt Five](http://www.tiltfive.com) and requires both the Irrlicht library
 and the Tilt Five native SDK.
 It is built with the command `make eniact5`.
 
-5. `ledmat`: a driver for an LED matrix connected to a Raspberrhy Pi running
+6. `ledmat`: a driver for an LED matrix connected to a Raspberrhy Pi running
 Plan 9.
 Some discussion and a brief demonstration of this was presented at the
 [11th International Workshop on Plan 9](http://iwp9.org).
 
-To run the simulator with a graphical display, add the `-v` option to the
+To run the simulator with visualization, add the `-v` option to the
 command.
 For example, if we wanted to run the prime number sieve with the TCL/Tk
 graphical support, we'd use the command:
