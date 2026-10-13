@@ -489,6 +489,9 @@ func ftunit(unit int, cyctrunk chan pulse) {
 
 	f := &ftable[unit]
 	f.ring = -3
+	for i := range f.rptsw {
+		f.rptsw[i] = 1
+	}
 	f.update = make(chan int)
 	go ftunit2(f)
 	f.resp = make(chan int)
