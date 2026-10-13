@@ -640,7 +640,7 @@ mainloop:
 			os.Exit(0)
 		}
 		s := msgin.Text()
-		p := strings.Split(s, " ")
+		p := strings.Fields(s)
 		switch p[0] {
 		case "exit":
 			break mainloop
