@@ -367,7 +367,8 @@ s a18.op3 A
 s a18.cc3 0
 p 3-5 a20.6i
 s a20.op6 β
-s a20.cc6 C
+#s a20.cc6 C
+s a20.cc6 0
 s a20.rp6 1
 p a13.S 1
 p 1 a20.β
@@ -535,12 +536,14 @@ p 2 a5.β
 p a5.A 2
 p 4-5 a5.5i			# a5.5: 4-5 α(1)C1 4-6
 s a5.op5 α
-s a5.cc5 C
+#s a5.cc5 C
+s a5.cc5 0
 s a5.rp5 1
 p a5.5o 4-6
 p 4-6 a5.6i			# a5.6: 4-6 α(1)C1
 s a5.op6 α
-s a5.cc6 C
+#s a5.cc6 C
+s a5.cc6 0
 s a5.rp6 1
 p 4-6 c.13i			# c.13: Elr
 s c.s13 Elr
